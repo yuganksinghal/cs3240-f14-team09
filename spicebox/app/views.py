@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 from app.models import Bulletin
+django.contrib.admin.models import User
 from django.contrib.auth import authenticate, login
 
 def login(request):

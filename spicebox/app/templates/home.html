@@ -6,21 +6,21 @@
   <body>
     <h1>SpiceBox</h1>
     {% if bulletins|length == 0%}
-    <p>no bulletins are available<p>
-      {% else %}
+      <p>no bulletins are available<p>
+    {% else %}
       {% for b in bulletins %}
-      {% load tz %}
-      Date: {{b.pub_date|localtime}}<br>
-      Author: {{b.author.username}}<br>
-      Description:<br>
-      {{b.description}}<br>
-      Files:<br> 
-      {% for f in files %}
-      {% if b == f.bulletin %}
-      {{f.filename}}<br>
-      {% endif %}
-      {% endfor %}
+        {% load tz %}
+        Date: {{b.pub_date|localtime}}<br>
+        Author: {{b.author.username}}<br>
+        Description:<br>
+        {{b.description}}<br>
+        Files:<br> 
+        {% for f in files %}
+          {% if b == f.bulletin %}
+            {{f.filename}}<br>
+          {% endif %}
+        {% endfor %}
       {% endfor %} 
-      {% endif %}
+    {% endif %}
   </body>
 </html>
