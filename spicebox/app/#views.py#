@@ -4,6 +4,7 @@ from app.models import Bulletin
 from django.contrib.auth import authenticate, login
 
 def login(request):
+    
     template = loader.get_template('login.html')
     context = RequestContext(request)
     return HttpResponse(template.render(context))
