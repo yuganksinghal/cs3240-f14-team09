@@ -51,6 +51,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'spicebox.urls'
 
+MEDIA_ROOT = os.path.join(BASE_DIR,'uploads')
+MEDIA_URL = "new bulletin"
 WSGI_APPLICATION = 'spicebox.wsgi.application'
 
 
