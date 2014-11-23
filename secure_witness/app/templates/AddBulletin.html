@@ -1,0 +1,17 @@
+<html>
+    <body>
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="/add/" method="post" enctype=multipart/form-data>
+            {% csrf_token %}
+{#         {% comment %}   <p>{{ form.non_field_errors }}errors</p>#}
+{#            <p>{{ form.files.label_tag }} {{ form.files.help_text }} label and text</p>#}
+{#            <p>#}
+{#                errors: {{ form.files.errors }}#}
+{#                files: {{ form.files }}#}
+{#            </p>{% endcomment %}#}
+            {{ form }}
+            {% comment %}<p><input type="file" name="files"></p>{% endcomment %}
+            <p><input type="submit" value="Submit" /></p>
+        </form>
+    </body>
+</html>
