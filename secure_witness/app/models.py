@@ -12,7 +12,7 @@ class Bulletin(models.Model):
         
 class File(models.Model):
     filename = models.CharField(max_length=50)
-    path = models.CharField(max_length=200)
+    path = models.FileField(upload_to='Bulletins/user/%Y/%m/%d')
     bulletin = models.ForeignKey(Bulletin)
     users = models.ManyToManyField(User)
     

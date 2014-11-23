@@ -1,11 +1,12 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
-from app.models import Bulletin
+from app.models import Bulletin, File
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django import forms
-from app.forms import UserForm
+from app.forms import UserForm, BulletinForm
 from django.core.urlresolvers import reverse
+from django.shortcuts import render_to_response
 
 def register(request):
     registered = False
@@ -58,3 +59,26 @@ def home(request):
         'files':files
     })
     return HttpResponse(template.render(context))
+
+def post_Bulletin(request):
+    if(request.method== 'POST'):
+        form = BulletinForm(request.POST, request.FILES)
+        if form.is_valid():
+            print "hello"
+            b = Bulletin()
+            f = File()
+            #b.author = request.POST['author']
+            b.description = request.POST['description']
+            #b.pub_date = request.POST['publication date']
+            f.path = request.FILES['path']
+            f.save()
+            return HttpResponse("Saved!")
+
+    else:
+        form=BulletinForm()
+
+    return render_to_response(
+        'AddBulletin.html',
+        {'form': form},
+        context_instance=RequestContext(request)
+    )
