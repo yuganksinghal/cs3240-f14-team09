@@ -10,10 +10,18 @@ class UserForm(forms.ModelForm):
 
 
 class BulletinForm(forms.Form):
-    author = forms.CharField(label="Author", max_length=100)
     description = forms.CharField(label = "Description", max_length=200)
     pubdate = forms.DateField(required=False)
-    path = forms.FileField(
+    path = forms.FileField (
+        label='Select a file',
+        help_text='max. 42 megabytes'
+    )
+
+class EditBulletinForm(forms.Form):
+    description = forms.CharField(label = "Description", max_length=200)
+    pubdate = forms.DateField(required=False)
+    path = forms.FileField (
+        required=False,
         label='Select a file',
         help_text='max. 42 megabytes'
     )

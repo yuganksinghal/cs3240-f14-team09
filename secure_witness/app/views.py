@@ -4,9 +4,11 @@ from app.models import Bulletin, File
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django import forms
-from app.forms import UserForm, BulletinForm
+from app.forms import UserForm, BulletinForm, EditBulletinForm
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
+import datetime
+
 
 def register(request):
     registered = False
@@ -64,13 +66,15 @@ def post_Bulletin(request):
     if(request.method== 'POST'):
         form = BulletinForm(request.POST, request.FILES)
         if form.is_valid():
-            print "hello"
+            print "Creating new Bulletin"
             b = Bulletin()
             f = File()
-            #b.author = request.POST['author']
+            b.author = request.user
             b.description = request.POST['description']
-            #b.pub_date = request.POST['publication date']
+            b.pub_date = datetime.datetime.now()
             f.path = request.FILES['path']
+            b.save()
+            f.bulletin = b
             f.save()
             return HttpResponse("Saved!")
 
@@ -79,6 +83,27 @@ def post_Bulletin(request):
 
     return render_to_response(
         'AddBulletin.html',
+        {'form': form},
+        context_instance=RequestContext(request)
+    )
+
+def edit_Bulletin(request):
+
+    if(request.method== 'POST'):
+        form = EditBulletinForm(request.POST, request.FILES)
+        if form.is_valid():
+            print "hello"
+            b = Bulletin.objects.filter(id=1)
+            f = File()
+            b.update(description = request.POST['description'])
+            f.path = f.update(path = request.FILES['path'])
+            return HttpResponse("Updated!")
+
+    else:
+        form=EditBulletinForm()
+
+    return render_to_response(
+        'EditBulletin.html',
         {'form': form},
         context_instance=RequestContext(request)
     )
