@@ -1,0 +1,14 @@
+{% extends "base.djhtml" %}
+{% block title %} Folders {% endblock %}
+{% block content %}
+  {% for folder in folders %}
+    {{folder}}
+    <ul>
+      {% for bulletin in bulletins%}
+	{% if folder == bulletin.folder %}
+	  <li>{{bulletin}}</li>
+	{% endif %}
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endblock %}

@@ -1,12 +1,14 @@
 {% extends "base.djhtml" %}
-{% block title %} Home {% endblock %}
+{% block title %} Bulletins {% endblock %}
 {% block content %}
+  <h1> Bulletins </h1>
   {% if bulletins|length == 0%}
     <p>No bulletins are available<p>
   {% else %}
       {% for b in bulletins %}
 	{% load tz %}
-        Date: {{b.pub_date|localtime}}<br>
+        Title:{{b}}<br>
+	Date: {{b.pub_date|localtime}}<br>
         Author: {{b.author.username}}<br>
         Description:<br>
         {{b.description}}<br>

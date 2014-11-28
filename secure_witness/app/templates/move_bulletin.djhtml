@@ -1,0 +1,21 @@
+{% extends "base.djhtml" %}
+{% block title %} Move A Bulletin {% endblock %}
+{% block content %}
+    <h1>Move A Bulletin</h1>
+    <form id="move_bulletin_form" method="post" action="/my_bulletins/move">
+      {% csrf_token %}
+      <select name="bulletin">
+	{% for bulletin in bulletins %}}
+	    <option value="{{ bulletin.pk }}">{{ bulletin }}</option>
+	{% endfor %}
+      </select>
+      <br>
+      <select name="to_folder">
+	{% for folder in folders %}}
+	    <option value="{{ folder.pk }}">{{ folder }}</option>
+	{% endfor %}
+      </select>
+      <br>
+      <input type="submit" value="submit"/>
+    </form>
+{% endblock %}

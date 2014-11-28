@@ -1,0 +1,17 @@
+{% extends "base.djhtml" %}
+{% block title %} Delete A Folder {% endblock %}
+{% block content %}
+    <h1>Delete A Folder</h1>
+    <form id="delete_folder_form" method="post" action="/folders/delete/">
+      {% csrf_token %}
+      <select name="folder">
+	{% for folder in folders %}}
+	  {% if user.username != folder.name %}
+	    <option value="{{ folder.pk }}">{{ folder }}</option>
+	{% endif %}
+	{% endfor %}
+      </select>
+      <br>
+      <input type="submit" value="submit"/>
+    </form>
+{% endblock %}
