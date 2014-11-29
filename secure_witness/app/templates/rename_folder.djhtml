@@ -1,10 +1,10 @@
 {% extends "base.djhtml" %}
-{% block title %} Delete A Folder {% endblock %}
+{% block title %} Rename A Folder {% endblock %}
 {% block content %}
-    <h1>Delete A Folder</h1>
-    <form id="delete_folder_form" method="post" action="/folders/delete/">
+    <h1>Rename A Folder</h1>
+    <form id="rename_folder_form" method="post" action="/folders/rename/">
       {% csrf_token %}
-      Select A Folder:<select name="folder">
+      Select Folder: <select name="folder_pk">
 	{% for folder in folders %}}
 	  {% if user.username != folder.name %}
 	    <option value="{{ folder.pk }}">{{ folder }}</option>
@@ -12,6 +12,8 @@
 	{% endfor %}
       </select>
       <br>
+      New Folder Name: <input type="text" name="name" value="" size="50"/>
+      <br/>
       <input type="submit" value="submit"/>
     </form>
 {% endblock %}

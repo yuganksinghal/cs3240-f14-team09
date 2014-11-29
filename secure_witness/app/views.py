@@ -17,6 +17,8 @@ def register(request):
             user = user_form.save()            
             user.set_password(user.password)
             user.save()
+            folder = Folder(name=user.username, owner=user)
+            folder.save()
             registered = True
         else:
             print user_form.errors
@@ -81,6 +83,29 @@ def my_bulletins(request):
     else:
         return HttpResponseRedirect(reverse('login'))
 
+def move_bulletin(request):
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            bulletin_pk = request.POST['bulletin']
+            folder_pk = request.POST['to_folder']
+            bulletin = Bulletin.objects.get(pk=bulletin_pk)
+            folder = Folder.objects.get(pk=folder_pk)
+            bulletin.folder = folder
+            bulletin.save()
+            return HttpResponseRedirect(reverse('folders'))
+        else:
+            user = request.user
+            folders = user.folder_set.all()
+            bulletins = user.bulletin_set.all()
+            template = loader.get_template('move_bulletin.djhtml')
+            context = RequestContext(request,{
+                'folders': folders,
+                'bulletins': bulletins
+            })
+            return HttpResponse(template.render(context))
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
 def folders(request):
     if request.user.is_authenticated():
         user = request.user
@@ -113,7 +138,7 @@ def add_folder(request):
             context = RequestContext(request)
             return HttpResponse(template.render(context))
     else:
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse('logi+n'))
             
 def delete_folder(request):
     if request.user.is_authenticated():
@@ -122,40 +147,68 @@ def delete_folder(request):
             folder = Folder.objects.get(pk=pk)
             for bulletin in folder.bulletin_set.all():
                 bulletin.delete()
-                folder.delete()
-                return HttpResponseRedirect(reverse('folders'))
-            else:
-                user = request.user
-                folders = user.folder_set.all()
-                template = loader.get_template('delete_folder.djhtml')
-                context = RequestContext(request,{
-                    'user': user, 
-                    'folders': folders
-                })
-                return HttpResponse(template.render(context))
-    else:
-         return HttpResponseRedirect(reverse('login'))
-
-def move_bulletin(request):
-    if request.user.is_authenticated():
-        if request.method == 'POST':
-            bulletin_pk = request.POST['bulletin']
-            folder_pk = request.POST['to_folder']
-            bulletin = Bulletin.objects.get(pk=bulletin_pk)
-            folder = Folder.objects.get(pk=folder_pk)
-            bulletin.folder = folder
-            bulletin.save()
+            folder.delete()
             return HttpResponseRedirect(reverse('folders'))
         else:
             user = request.user
             folders = user.folder_set.all()
-            bulletins = user.bulletin_set.all()
-            template = loader.get_template('move_bulletin.djhtml')
+            template = loader.get_template('delete_folder.djhtml')
+            context = RequestContext(request,{
+                'user': user, 
+                'folders': folders
+            })
+            return HttpResponse(template.render(context))
+    else:
+         return HttpResponseRedirect(reverse('login'))
+
+def copy_folder(request):
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            pk = request.POST['folder']
+            folder = Folder.objects.get(pk=pk)
+            folder_copy = Folder(
+                name=folder.name +"_copy",
+                owner=folder.owner
+            )
+            folder_copy.save()
+            for bulletin in folder.bulletin_set.all():
+                folder_copy.bulletin_set.create(
+                    title=bulletin.title,
+                    description=bulletin.description,
+                    pub_date=bulletin.pub_date,
+                    author=bulletin.author,
+                    folder=bulletin.folder
+                )
+            print folder_copy.bulletin_set.all()
+            return HttpResponseRedirect(reverse('folders'))
+        else:
+            user = request.user
+            folders = user.folder_set.all()
+            template = loader.get_template('copy_folder.djhtml')
+            context = RequestContext(request,{
+                'user': user, 
+                'folders': folders
+            })
+            return HttpResponse(template.render(context))
+    else:
+         return HttpResponseRedirect(reverse('login'))
+
+def rename_folder(request):
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            folder_pk = request.POST['folder_pk']
+            name = request.POST['name']
+            folder = Folder.objects.get(pk=folder_pk)
+            folder.name = name
+            folder.save()
+            return HttpResponseRedirect(reverse('folders'))
+        else:
+            user = request.user
+            folders = user.folder_set.all()
+            template = loader.get_template('rename_folder.djhtml')
             context = RequestContext(request,{
                 'folders': folders,
-                'bulletins': bulletins
             })
             return HttpResponse(template.render(context))
     else:
         return HttpResponseRedirect(reverse('login'))
-   

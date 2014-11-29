@@ -12,5 +12,7 @@ urlpatterns = patterns('',
     url(r'^folders/$', views.folders, name='folders'),
     url(r'^folders/add/$',views.add_folder, name='add folder'),
     url(r'^folders/delete/$',views.delete_folder, name='delete folder'),
+    url(r'^folders/copy/$',views.copy_folder, name='copy folder'),
+    url(r'^folders/rename/$',views.rename_folder, name='rename folder'),
     url(r'^admin/', include(admin.site.urls)),
 )
