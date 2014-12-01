@@ -49,6 +49,9 @@ def user_login(request):
         template = loader.get_template('login.djhtml')
         context = RequestContext(request)
         return HttpResponse(template.render(context))
+
+#def user_logout(request):
+    
       
 def home(request):
     bulletins = Bulletin.objects.order_by('-pub_date')
@@ -88,25 +91,24 @@ def post_Bulletin(request):
     )
 
 def edit_Bulletin(request):
-
-    if(request.method== 'POST'):
-        form = EditBulletinForm(request.POST, request.FILES)
-        if form.is_valid():
-            print "hello"
-            b = Bulletin.objects.filter(id=1)
-            f = File()
-            b.update(description = request.POST['description'])
-            f.path = f.update(path = request.FILES['path'])
-            return HttpResponse("Updated!")
-
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            pk = request.POST['bulletin']
+            bulletin = Bulletin.objects.get(pk=pk)
+            bulletin.description = request.POST['description']
+	    bulletin.save()
+            return HttpResponse(reverse('folders'))
+        else:
+            user = request.user
+            bulletins = user.bulletin_set.all()
+            template = loader.get_template('edit_bulletin.djhtml')
+            context = RequestContext(request,{
+                'user': user, 
+                'bulletins': bulletins
+            })
+            return HttpResponse(template.render(context))
     else:
-        form=EditBulletinForm()
-
-    return render_to_response(
-        'EditBulletin.html',
-        {'form': form},
-        context_instance=RequestContext(request)
-    )
+         return HttpResponse("delete")
   
     
 def delete_Bulletin(request):
