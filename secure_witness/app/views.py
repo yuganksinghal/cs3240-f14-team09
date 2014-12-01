@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 from app.models import Bulletin, File
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django import forms
 from app.forms import UserForm, BulletinForm, EditBulletinForm
 from django.core.urlresolvers import reverse
@@ -50,8 +50,8 @@ def user_login(request):
         context = RequestContext(request)
         return HttpResponse(template.render(context))
 
-#def user_logout(request):
-    
+def user_logout(request):
+    logout(request)
       
 def home(request):
     bulletins = Bulletin.objects.order_by('-pub_date')
@@ -97,7 +97,7 @@ def edit_Bulletin(request):
             bulletin = Bulletin.objects.get(pk=pk)
             bulletin.description = request.POST['description']
 	    bulletin.save()
-            return HttpResponse(reverse('folders'))
+            return HttpResponse("updated")
         else:
             user = request.user
             bulletins = user.bulletin_set.all()
@@ -108,7 +108,7 @@ def edit_Bulletin(request):
             })
             return HttpResponse(template.render(context))
     else:
-         return HttpResponse("delete")
+         return HttpResponseRedirect(reverse('login'))
   
     
 def delete_Bulletin(request):
@@ -117,7 +117,7 @@ def delete_Bulletin(request):
             pk = request.POST['bulletin']
             bulletin = Bulletin.objects.get(pk=pk)
             bulletin.delete()
-            return HttpResponseRedirect(reverse('folders'))
+            return HttpResponse("deleted")
         else:
             user = request.user
             bulletins = user.bulletin_set.all()
@@ -128,7 +128,7 @@ def delete_Bulletin(request):
             })
             return HttpResponse(template.render(context))
     else:
-         return HttpResponse("delete")
+         return HttpResponseRedirect('login')
 
       
 def copy_Bulletin(request):
