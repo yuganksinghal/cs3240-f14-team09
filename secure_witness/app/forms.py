@@ -25,4 +25,4 @@ class EditBulletinForm(forms.Form):
         label='Select a file',
         help_text='max. 42 megabytes'
     )
-    password
+    password = forms.CharField(max_length = 32)
