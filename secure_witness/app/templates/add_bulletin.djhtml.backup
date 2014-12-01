@@ -1,0 +1,10 @@
+{% extends "base.djhtml" %}
+{% block title %} Add A Bulletin {% endblock %}
+{% block content %}
+  <h1>Add A Bulletin</h1>
+  <form id="add_bulletin_form" action="/my_bulletins/add" method="post" enctype=multipart/form-data>
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" value="Submit" />
+  </form>
+{% endblock %}

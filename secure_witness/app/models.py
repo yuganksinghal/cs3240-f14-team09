@@ -18,9 +18,12 @@ class Bulletin(models.Model):
     def __unicode__(self):
         return self.title
 
+def get_upload_path(instance, filename):
+    return str(instance.user) + '/' + filename
+
 class File(models.Model):
     filename = models.CharField(max_length=50)
-    path = models.CharField(max_length=200)
+    path = models.FileField(upload_to=get_upload_path)
     bulletin = models.ForeignKey(Bulletin)
     user = models.ForeignKey(User)
     

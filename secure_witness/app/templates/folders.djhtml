@@ -1,6 +1,7 @@
 {% extends "base.djhtml" %}
-{% block title %} Folders {% endblock %}
+{% block title %} My Folders {% endblock %}
 {% block content %}
+  <h1> My Folders </h1>
   {% for folder in folders %}
     {{folder}}
     <ul>

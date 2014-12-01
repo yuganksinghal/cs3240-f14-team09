@@ -2,7 +2,12 @@
   <html>
     <head>
       {% block head %}
-      <title>{% block title %}{% endblock  %} - Secure Witness</title
+      <title>{% block title %}{% endblock  %} - Secure Witness</title>
+      <style>
+	td {
+	  outline-style: solid;
+	}
+      </style>
       {% endblock %}
     </head>
     <body>
