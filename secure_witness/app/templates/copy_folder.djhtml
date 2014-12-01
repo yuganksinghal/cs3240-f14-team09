@@ -4,12 +4,12 @@
   <h1>Copy A Folder</h1>
   <form id="copy_folder_form" method="post" action="/folders/copy/">
     {% csrf_token %}
-   Select A Folder: <select name="folder">
+   Select A Folder: <select class="form-control" name="folder">
       {% for folder in folders %}}x
 	  <option value="{{ folder.pk }}">{{ folder }}</option>
       {% endfor %}
     </select>
     <br>
-    <input type="submit" value="submit"/>
+    <input class="form-control" type="submit" value="submit"/>
   </form>
 {% endblock %}

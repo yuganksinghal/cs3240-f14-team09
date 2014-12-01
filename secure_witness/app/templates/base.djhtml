@@ -3,26 +3,29 @@
     <head>
       {% block head %}
       <title>{% block title %}{% endblock  %} - Secure Witness</title>
-      <style>
-	td {
-	  outline-style: solid;
-	}
-      </style>
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+      <!-- Optional theme -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>	
       {% endblock %}
     </head>
     <body>
-    <nav>
-	<a href="/my_bulletins">my bulletins</a>
-	<a href="/my_bulletins/add">add bulletins</a>
-	<a href="/my_bulletins/edit">edit bulletin</a>
-	<a href="/my_bulletins/copy">copy bulletin</a>
-	<a href="/folders">folders</a>
-	<a href="/folders/add">add folder</a>
-	<a href="/folders/delete">delete folder</a>
-	<a href="/folders/copy">copy folder</a>
-	<a href="/folders/rename">rename folder</a>
-	<a href="/logout">logout</a>
-    <nav>
+    <ul class="nav nav-pills">
+	<li class="nav"><a href="/bulletins">home</a></li>
+	<li class="nav"><a href="/my_bulletins">my bulletins</a></li>
+	<li class="nav"><a href="/my_bulletins/add">add bulletins</a></li>
+	<li class="nav"><a href="/my_bulletins/delete">delete bulletins</a></li>
+	<li class="nav"><a href="/my_bulletins/edit">edit bulletin</a></li>
+	<li class="nav"><a href="/my_bulletins/copy">copy bulletin</a></li>
+	<li class="nav"><a href="/folders">folders</a></li>
+	<li class="nav"><a href="/folders/add">add folder</a></li>
+	<li class="nav"><a href="/folders/delete">delete folder</a></li>
+	<li class="nav"><a href="/folders/copy">copy folder</a></li>
+	<li class="nav"><a href="/folders/rename">rename folder</a></li>
+	<li class="nav"><a href="/logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true"> </span></a></li>
+    </ul>
       <div id="content">
 	{% block content %}{% endblock %}
       </div>

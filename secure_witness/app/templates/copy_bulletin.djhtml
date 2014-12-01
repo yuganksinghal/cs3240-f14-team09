@@ -4,12 +4,12 @@
   <h1>Copy A Bulletin</h1>
   <form id="copy_bulletin_form" method="post" action="/my_bulletins/copy/">
     {% csrf_token %}
-   Select A Bulletin: <select name="bulletin">
+   Select A Bulletin: <select class="form-control" name="bulletin">
       {% for Bulletin in bulletins %}}x
 	  <option value="{{ Bulletin.pk }}">{{ Bulletin.description }}</option>
       {% endfor %}
     </select>
     <br>
-    <input type="submit" value="submit"/>
+    <input class="form-control" type="submit" value="submit"/>
   </form>
 {% endblock %}
