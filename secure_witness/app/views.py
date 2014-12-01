@@ -107,3 +107,48 @@ def edit_Bulletin(request):
         {'form': form},
         context_instance=RequestContext(request)
     )
+  
+    
+def delete_Bulletin(request):
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            pk = request.POST['bulletin']
+            bulletin = Bulletin.objects.get(pk=pk)
+            bulletin.delete()
+            return HttpResponseRedirect(reverse('folders'))
+        else:
+            user = request.user
+            bulletins = user.bulletin_set.all()
+            template = loader.get_template('delete_bulletin.djhtml')
+            context = RequestContext(request,{
+                'user': user, 
+                'bulletins': bulletins
+            })
+            return HttpResponse(template.render(context))
+    else:
+         return HttpResponse("delete")
+
+      
+def copy_Bulletin(request):
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            pk = request.POST['bulletin']
+            bulletin = Bulletin.objects.get(pk=pk)
+            bulletin_copy = Bulletin(
+                description=bulletin.description,
+                author=bulletin.author,
+                pub_date=bulletin.pub_date
+            )
+            bulletin_copy.save()
+            return HttpResponse("copied")
+        else:
+            user = request.user
+            bulletins = user.bulletin_set.all()
+            template = loader.get_template('copy_bulletin.djhtml')
+            context = RequestContext(request,{
+                'user': user, 
+                'bulletins': bulletins
+            })
+            return HttpResponse(template.render(context))
+    else:
+         return HttpResponseRedirect(reverse('login'))

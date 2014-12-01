@@ -1,0 +1,17 @@
+{% extends "base.djhtml" %}
+{% block title %} Delete A Bulletin {% endblock %}
+{% block content %}
+    <h1>Delete A Folder</h1>
+    <form id="delete_bulletin_form" method="post" action="/folders/delete/">
+      {% csrf_token %}
+      Select A Folder:<select name="bulletin">
+	{% for Bulletin in bulletins %}}
+	  {% if user.username != Bulletin.author %}
+	    <option value="{{ Bulletin.pk }}">{{ Bulletin }}</option>
+	  {% endif %}
+	{% endfor %}
+      </select>
+      <br>
+      <input type="submit" value="submit"/>
+    </form>
+{% endblock %}
