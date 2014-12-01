@@ -14,6 +14,7 @@ class Bulletin(models.Model):
     pub_date = models.DateTimeField('date published')
     author = models.ForeignKey(User)
     folder = models.ForeignKey(Folder)
+    anonymous = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.title

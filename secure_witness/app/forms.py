@@ -30,3 +30,4 @@ class BulletinForm(forms.Form):
         label='Select a file',
         required = False
     )
+    anonymous = forms.BooleanField(required=False)
