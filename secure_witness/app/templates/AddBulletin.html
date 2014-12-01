@@ -1,0 +1,10 @@
+<html>
+    <body>
+        <!-- Upload form. Note enctype attribute! -->
+        <form action="/add/" method="post" enctype=multipart/form-data>
+            {% csrf_token %}
+{#          {{ form }}
+            <p><input type="submit" value="Submit" /></p>
+        </form>
+    </body>
+</html>

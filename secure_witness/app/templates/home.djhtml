@@ -1,0 +1,21 @@
+{% extends "base.djhtml" %}
+{% block title %} Home {% endblock %}
+{% block content %}
+  {% if bulletins|length == 0%}
+    <p>No bulletins are available<p>
+  {% else %}
+      {% for b in bulletins %}
+	{% load tz %}
+        Date: {{b.pub_date|localtime}}<br>
+        Author: {{b.author.username}}<br>
+        Description:<br>
+        {{b.description}}<br>
+        Files:<br> 
+        {% for f in files %}
+          {% if b == f.bulletin %}
+            {{f.filename}}<br>
+          {% endif %}
+        {% endfor %}
+      {% endfor %} 
+  {% endif %}
+{% endblock %}
