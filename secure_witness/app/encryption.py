@@ -33,8 +33,13 @@ def decrypt_file(password, in_filename, out_filename=None, chunksize=24*1024):
     with open(in_filename, 'rb') as infile:
         origsize = struct.unpack('<Q', infile.read(struct.calcsize('Q')))[0]
         iv = infile.read(16)
+        #check = infile.read(32)
+        #print check
+        #key = hashlib.sha256(password)
+        #if(check != key):
+            #return False
         decryptor = AES.new(key, AES.MODE_CBC, iv)
-
+        
         with open(out_filename, 'wb') as outfile:
             while True:
                 chunk = infile.read(chunksize)
@@ -43,3 +48,4 @@ def decrypt_file(password, in_filename, out_filename=None, chunksize=24*1024):
                 outfile.write(decryptor.decrypt(chunk))
 
             outfile.truncate(origsize)
+        

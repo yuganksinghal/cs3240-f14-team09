@@ -1,11 +1,14 @@
 from django.conf.urls import patterns,url,include
 from app import views
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = patterns('',
     url(r'^$',views.default, name='default'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login/$',views.user_login, name='login'),
+    url(r'^logout/$',views.user_logout, name='logout'),
     url(r'^bulletins/$',views.bulletins, name='bulletins'),
     url(r'^my_bulletins/$',views.my_bulletins, name='my bulletins'),
     url(r'^bulletins/chart/$',views.bulletins_chart, name='bulletins chart'),
@@ -20,5 +23,6 @@ urlpatterns = patterns('',
     url(r'^folders/delete/$',views.delete_folder, name='delete folder'),
     url(r'^folders/copy/$',views.copy_folder, name='copy folder'),
     url(r'^folders/rename/$',views.rename_folder, name='rename folder'),
+    url(r'^files/(?P<file_id>\d+)/$', views.get_file, name='get file'),
     url(r'^admin/', include(admin.site.urls)),
-)
+) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

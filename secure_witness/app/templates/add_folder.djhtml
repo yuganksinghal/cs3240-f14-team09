@@ -4,7 +4,7 @@
     <h1>Add A Folder</h1>
     <form id="add_folder_form" method="post" action="/folders/add/">
       {% csrf_token %}
-      Folder Name: <input type="text" name="name" value="" size="50"/>
+      Folder Name: <input type="text" name="name" value="" size="50" required>
       <br/>
       <input type="submit" value="submit"/>
     </form>	

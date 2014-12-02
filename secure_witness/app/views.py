@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django import forms
 from app.forms import UserForm, BulletinForm
 from django.core.urlresolvers import reverse
@@ -11,10 +11,11 @@ import datetime
 from encryption import encrypt_file, decrypt_file
 import os
 from django.conf import settings
+import urllib
 
 def default(request):
     return HttpResponseRedirect(reverse('bulletins'))
-
+    
 def register(request):
     registered = False
     if request.method =='POST':
@@ -57,6 +58,14 @@ def user_login(request):
         context = RequestContext(request)
         return HttpResponse(template.render(context))
 
+def user_logout(request):
+    path = os.getcwd() + '/temp/'
+    command = 'rm ' + path + "*" 
+    print command
+    os.system(command)
+    logout(request)
+    return HttpResponseRedirect(reverse('login'))
+    
 def folders(request):
     if request.user.is_authenticated():
         user = request.user
@@ -200,11 +209,11 @@ def my_bulletins(request):
         files = []
         for bulletin in bulletins:
             files.extend(bulletin.file_set.all())
-            template = loader.get_template('my_bulletins.djhtml')
-            context = RequestContext(request, {
+        template = loader.get_template('my_bulletins.djhtml')
+        context = RequestContext(request, {
             'bulletins':bulletins,
             'files':files
-            })
+        })
         return HttpResponse(template.render(context))
     else:
         return HttpResponseRedirect(reverse('login'))
@@ -249,51 +258,6 @@ def move_bulletin(request):
     else:
         return HttpResponseRedirect(reverse('login'))
 
-def add_bulletin(request):
-    if request.user.is_authenticated():
-        if(request.method== 'POST'):
-            form = BulletinForm(request.POST, request.FILES)
-            if form.is_valid():
-                title = request.POST['title']
-                description = request.POST['description']
-                pub_date = datetime.datetime.now()
-                author = request.user
-                folder = Folder.objects.get(name=str(author))
-                bulletin = Bulletin(
-                    title=title, 
-                    description=description,
-                    pub_date = pub_date,
-                    author = author,
-                    folder = folder
-                )
-                bulletin.save()
-                for filename, file in request.FILES.iteritems():
-                    path =settings.MEDIA_ROOT+'/'+request.user.username+'/'+request.FILES[filename].name
-                    if os.path.exists(path):
-                        os.remove(path)
-                    bulletin.file_set.create(
-                    filename = request.FILES[filename].name,
-                    path = file,
-                    user = author
-                    )
-                password = request.POST['password']
-                for file in bulletin.file_set.all():
-                    path = os.getcwd() + file.path.url
-                    encrypt_file(password, path)
-                    os.remove(path)
-                    decrypt_file(password,path+".enc")
-                return HttpResponseRedirect(reverse('my bulletins'))
-
-        else:
-            form=BulletinForm()
-            return render_to_response(
-            'add_bulletin.djhtml',
-                {'form': form},
-                context_instance=RequestContext(request)
-            )
-    else:
-        return HttpResponseRedirect(reverse('login'))
-
 def edit_bulletin(request):
     if request.user.is_authenticated():
         if request.method == 'POST':
@@ -312,8 +276,7 @@ def edit_bulletin(request):
             })
             return HttpResponse(template.render(context))
     else:
-         return HttpResponseRedirect(reverse('login'))
-  
+         return HttpResponseRedirect(reverse('login'))  
     
 def delete_bulletin(request):
     if request.user.is_authenticated():
@@ -365,3 +328,72 @@ def copy_bulletin(request):
             return HttpResponse(template.render(context))
     else:
          return HttpResponseRedirect(reverse('login'))
+
+def add_bulletin(request):
+    if request.user.is_authenticated():
+        if(request.method== 'POST'):
+            form = BulletinForm(request.POST, request.FILES)
+            if form.is_valid():
+                title = request.POST['title']
+                description = request.POST['description']
+                pub_date = datetime.datetime.now()
+                author = request.user
+                folder = Folder.objects.get(name=str(author))
+                bulletin = Bulletin(
+                    title=title, 
+                    description=description,
+                    pub_date = pub_date,
+                    author = author,
+                    folder = folder
+                )
+                bulletin.save()
+                for filename, file in request.FILES.iteritems():
+                    path =settings.MEDIA_ROOT+'/'+request.user.username+'/'+request.FILES[filename].name
+                    if os.path.exists(path):
+                        os.remove(path)
+                    bulletin.file_set.create(
+                    filename = request.FILES[filename].name,
+                    path = file,
+                    user = author
+                    )
+                password = request.POST['password']
+                for file in bulletin.file_set.all():
+                    path = os.getcwd() + '/uploads/' + request.user.username + '/' + file.filename
+                    encrypt_file(password, path)
+                    os.remove(path)
+                return HttpResponseRedirect(reverse('my bulletins'))
+
+        else:
+            form=BulletinForm()
+            return render_to_response(
+            'add_bulletin.djhtml',
+                {'form': form},
+                context_instance=RequestContext(request)
+            )
+    else:
+        return HttpResponseRedirect(reverse('login'))
+
+def get_file(request,file_id):
+    if request.user.is_authenticated():
+        show_file = False
+        download = ''
+        if request.method == 'POST':
+            password = request.POST['password']
+            file = File.objects.get(pk=file_id)
+            path = os.getcwd() + '/uploads/' + request.user.username + '/' + file.filename
+            to_path = os.getcwd() + '/temp/' + file.filename
+            decrypt_file(password, path+".enc", to_path)
+            download = urllib.quote('/temp/'+file.filename)
+            print download
+            show_file = True
+            
+        href = '/files/' + file_id + '/'
+        template = loader.get_template('get_file.djhtml')
+        context = RequestContext(request,{
+            'href': href,
+            'flag': show_file,
+            'download':download,
+        })
+        return HttpResponse(template.render(context))
+    else:
+        return HttpResponseRedirect(reverse('login'))

@@ -2,7 +2,7 @@
 {% block title %} Delete A Folder {% endblock %}
 {% block content %}
     <h1>Delete A Folder</h1>
-    {% if folder|length == 0 %}
+    {% if folders|length == 1 %}
       <p> No Folders to delete </p>
     {% else %}
       <form id="delete_folder_form" method="post" action="/folders/delete/">
