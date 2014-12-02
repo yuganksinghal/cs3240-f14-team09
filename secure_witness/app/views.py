@@ -266,7 +266,8 @@ def add_bulletin(request):
                     author = author,
                     folder = folder
                 )
-                bulletin.anonymous = request.POST['anonymous']
+                if request.POST.get('anonymous'):
+                     bulletin.anonymous = True
                 bulletin.save()
                 for filename, file in request.FILES.iteritems():
                     path =settings.MEDIA_ROOT+'/'+request.user.username+'/'+request.FILES[filename].name
