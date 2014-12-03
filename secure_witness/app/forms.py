@@ -20,12 +20,9 @@ class BulletinForm(forms.Form):
         max_length=200,
         required = True
     )
-    
-    password = forms.CharField(
-        widget=forms.PasswordInput(),
-        required = True
-    )
-    
+
+    password = forms.CharField(label = 'Password: max 20 characters', max_length= 20, required=True)
+    anonymous = forms.BooleanField(required=False, label='Anonymous' )
     file = forms.FileField (
         label='Select a file',
         required = False

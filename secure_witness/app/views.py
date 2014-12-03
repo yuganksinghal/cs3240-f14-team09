@@ -7,7 +7,8 @@ from app.forms import UserForm, BulletinForm
 from django.core.urlresolvers import reverse
 from app.models import Bulletin, Folder, File
 from django.shortcuts import render_to_response
-import datetime 
+import datetime
+import hashlib
 from encryption import encrypt_file, decrypt_file
 import os
 from django.conf import settings
@@ -336,6 +337,7 @@ def add_bulletin(request):
             if form.is_valid():
                 title = request.POST['title']
                 description = request.POST['description']
+                password = request.POST['password']
                 pub_date = datetime.datetime.now()
                 author = request.user
                 folder = Folder.objects.get(name=str(author))
@@ -346,6 +348,9 @@ def add_bulletin(request):
                     author = author,
                     folder = folder
                 )
+                bulletin.password = str(hashlib.sha256(password).hexdigest())
+                if request.POST.get('anonymous'):
+                     bulletin.anonymous = True
                 bulletin.save()
                 for filename, file in request.FILES.iteritems():
                     path =settings.MEDIA_ROOT+'/'+request.user.username+'/'+request.FILES[filename].name
@@ -380,12 +385,13 @@ def get_file(request,file_id):
         if request.method == 'POST':
             password = request.POST['password']
             file = File.objects.get(pk=file_id)
-            path = os.getcwd() + '/uploads/' + request.user.username + '/' + file.filename
-            to_path = os.getcwd() + '/temp/' + file.filename
-            decrypt_file(password, path+".enc", to_path)
-            download = urllib.quote('/temp/'+file.filename)
-            print download
-            show_file = True
+            if hashlib.sha256(password).hexdigest() == file.bulletin.password:
+                path = os.getcwd() + '/uploads/' + request.user.username + '/' + file.filename
+                to_path = os.getcwd() + '/temp/' + file.filename
+                decrypt_file(password, path+".enc", to_path)
+                download = urllib.quote('/temp/'+file.filename)
+                print download
+                show_file = True
             
         href = '/files/' + file_id + '/'
         template = loader.get_template('get_file.djhtml')
