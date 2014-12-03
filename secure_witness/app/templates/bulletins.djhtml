@@ -5,6 +5,7 @@
   {% if bulletins|length == 0%}
     <p>No bulletins are available<p>
   {% else %}
+  <input type='button' href='/bulletins/chart/'>
       {% for b in bulletins %}
 	{% load tz %}
         Title:{{b}}<br>

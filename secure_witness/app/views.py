@@ -28,6 +28,9 @@ def register(request):
             folder = Folder(name=user.username, owner=user)
             folder.save()
             registered = True
+            a=authenticate(user.username, user.password)
+            login(request, a)
+
         else:
             print user_form.errors
     

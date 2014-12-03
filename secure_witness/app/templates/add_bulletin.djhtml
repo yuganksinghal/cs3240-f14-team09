@@ -4,7 +4,7 @@
   <h1>Add A Bulletin</h1>
   <form id="add_bulletin_form" action="/my_bulletins/add" method="post" enctype=multipart/form-data>
     {% csrf_token %}
-    {{form}}
+    {{forms}}
     <input type="submit" value="Submit" />
   </form>
 {% endblock %}
