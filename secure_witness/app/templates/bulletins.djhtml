@@ -15,7 +15,7 @@
         Files:<br> 
         {% for f in files %}
           {% if b == f.bulletin %}
-            <a  href=""> {{f.filename}} </a>
+            <a  href={% url 'get file' f.pk %}>{{f.filename}}</a>
 	      <br>
           {% endif %}
         {% endfor %}
