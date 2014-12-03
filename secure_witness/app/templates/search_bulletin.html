@@ -1,0 +1,54 @@
+{% extends "base.djhtml" %}
+{% block title %} Bulletins {% endblock %}
+{% block content %}
+<h1> Bulletins </h1>
+    <form action="/bulletin/search/" method="post">
+        {% csrf_token %}
+        <p>Search Title or Description of Bulletins</p>
+        <input type="text" name="search_text">
+        <input type="submit" value="Search">
+        <!--
+        <p>Search by Date</p>
+        Month
+        <select name="month">
+        {% for i in month_loop %}
+            <option values={{i}}>{{i}}</option>
+        {% endfor %}
+        </select>
+        Day
+        <select name="day">
+        {% for i in day_loop %}
+            <option values={{i}}>{{i}}</option>
+        {% endfor %}
+        </select>
+        Year
+        <select name="year">
+        {% for i in year_loop %}
+            <option values={{i}}>{{i}}</option>
+        {% endfor %}
+        </select>
+        <input type="submit" value="Search">
+        <br>
+        -->
+    </form>
+        {% if request.method == 'POST' %}
+            {% if search_result.count > 0 %}
+                <ul>
+                    {% for b in search_result %}
+                        <li>
+                            Description: {{b.description}} <br>
+                            Title: {{b.title}} <br>
+                            Date: {{b.pub_date}} <br>
+                            {% if b.anonymous == False %}
+                                author: {{b.author}} <br>
+                            {% else %}
+                                author: ANONYMOUS
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <h2>No result!</h2>
+            {% endif %}
+        {% endif %}
+    {% endblock %}

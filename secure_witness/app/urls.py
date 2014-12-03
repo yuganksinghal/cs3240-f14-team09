@@ -8,7 +8,7 @@ urlpatterns = patterns('',
     url(r'^bulletin/add/$', views.post_Bulletin, name='add bulletin'),
     url(r'^bulletin/edit/$', views.edit_Bulletin, name='edit bulletin'),
     url(r'^bulletin/copy/$', views.copy_Bulletin, name='copy bulletin'),
-    url(r'^bulletin/delete/$', views.delete_Bulletin, name='delete bulletin')
-
+    url(r'^bulletin/delete/$', views.delete_Bulletin, name='delete bulletin'),
+    url(r'^bulletin/search/$', views.search_Bulletin, name='search bulletin')
 )
 

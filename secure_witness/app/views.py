@@ -1,12 +1,14 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import RequestContext, loader
-from app.models import Bulletin, File
+from app.models import Bulletin, File, User
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django import forms
 from app.forms import UserForm, BulletinForm, EditBulletinForm
 from django.core.urlresolvers import reverse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
+from django.db.models import Q
+from itertools import chain
 import datetime
 
 
@@ -64,6 +66,35 @@ def home(request):
         'files':files
     })
     return HttpResponse(template.render(context))
+
+def search_Bulletin(request):
+    context = {}
+    context['month_loop'] = range(1,13)
+    context['day_loop'] = range(1,32)
+    context['year_loop'] = range(1900, 2015)
+
+    if request.method == 'POST':
+        search_text = request.POST['search_text']
+        #search_year = request.POST['year']
+        #search_month = request.POST['month']
+        #search_day = request.POST['day']
+        if len(search_text) > 0:
+            queryset = Bulletin.objects.all()
+            queryset = queryset.filter(Q(description__icontains=search_text) | Q(title__icontains=search_text ))
+            context['search_result'] = queryset
+
+            #queryset2 = User.objects.all()
+            #queryset2 = queryset2.filter(username__icontains=search_text)
+
+            #queryset3 = Bulletin.objects.all()
+            #queryset3 = queryset3.filter(Q(pub_date__year=search_year) | Q(pub_date__month = search_month) | Q(pub_date__day = search_day))
+
+            #allset = list(chain(queryset, queryset3))
+            #context['search_result'] = allset
+
+        else:
+            context['search_result'] = Bulletin.objects.none()
+    return render(request, 'search_bulletin.html', context)
 
 def post_Bulletin(request):
     if(request.method== 'POST'):
