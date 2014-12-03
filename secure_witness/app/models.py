@@ -14,7 +14,7 @@ class Bulletin(models.Model):
     pub_date = models.DateTimeField('date published')
     author = models.ForeignKey(User)
     folder = models.ForeignKey(Folder)
-    password = models.CharField(max_length=3000)
+    password = models.CharField(max_length=3000, default='')
     anonymous = models.BooleanField(default=False)
     def __unicode__(self):
         return self.title
