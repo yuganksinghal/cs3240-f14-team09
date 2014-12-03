@@ -5,6 +5,30 @@
   <form id="add_bulletin_form" action="/my_bulletins/add/" method="post" enctype=multipart/form-data>
     {% csrf_token %}
     {{form}}
+    {% if error %}
+      <li>Please Fill in Title And/Or Description</li>
+    {% endif %}
+    <br>
+    Select a file:<input id="id_file" name="file1" type="file"/>
+    <br>
+    Select a file:<input id="id_file" name="file2" type="file"/>
+    <br>
+    Select a file:<input id="id_file" name="file3" type="file"/>
+    <br>
+    Select a file:<input id="id_file" name="file4" type="file"/>
+    <br>
+    Select a file:<input id="id_file" name="file5" type="file"/>
+    <br>
+    Select a file:<input id="id_file" name="file6" type="file"/>
+    <br>
+    Select a file:<input id="id_file" name="file7" type="file"/>
+    <br>
+    Select a file:<input id="id_file" name="file8" type="file"/>
+    <br>
+    Select a file:<input id="id_file" name="file9" type="file"/>
+    <br>
+    Select a file:<input id="id_file" name="file10" type="file"/>
+    <br>
     <input type="submit" value="Submit" />
   </form>
 {% endblock %}

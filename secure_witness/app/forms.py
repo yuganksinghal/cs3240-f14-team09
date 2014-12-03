@@ -23,10 +23,11 @@ class BulletinForm(forms.Form):
     
     password = forms.CharField(
         widget=forms.PasswordInput(),
-        required = True
-    )
-    
-    file = forms.FileField (
-        label='Select a file',
         required = False
     )
+
+    anonymous = forms.BooleanField(
+        required=False, 
+        label='Anonymous' 
+    )
+    

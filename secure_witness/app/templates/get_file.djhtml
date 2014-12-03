@@ -1,15 +1,17 @@
 {% extends "base.djhtml" %}
 {% block title %} File {% endblock %}
 {% block content %}
-  {% if flag %}
+  {% if show_file %}
     <a href={{download}}> Download File </a>
   {% else  %}
     <h1>Input Password For File</h1>
-    {{file_id}}
     <form id="password_form" method="post" action={{href}}>
       {% csrf_token %}
       Password: <input type="password" name="password" value="" size="50" />
       <input type="submit" value="submit"/>
     </form>
+    {% if incorrect_password %}
+      Wrong Password, Please Try Again
+     {% endif %}
   {% endif %}
 {% endblock %}

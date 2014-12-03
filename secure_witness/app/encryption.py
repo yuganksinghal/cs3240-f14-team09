@@ -2,8 +2,7 @@ import hashlib
 import os, random, struct
 from Crypto.Cipher import AES
 
-def encrypt_file(password, in_filename, out_filename=None, chunksize=64*1024):
-    key = hashlib.sha256(password).digest()
+def encrypt_file(key, in_filename, out_filename=None, chunksize=64*1024):
     if not out_filename:
         out_filename = in_filename + '.enc'
 
@@ -25,8 +24,7 @@ def encrypt_file(password, in_filename, out_filename=None, chunksize=64*1024):
 
                 outfile.write(encryptor.encrypt(chunk))
 
-def decrypt_file(password, in_filename, out_filename=None, chunksize=24*1024):
-    key = hashlib.sha256(password).digest()
+def decrypt_file(key, in_filename, out_filename=None, chunksize=24*1024):
     if not out_filename:
         out_filename = os.path.splitext(in_filename)[0]
 

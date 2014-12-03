@@ -1,13 +1,22 @@
-{% extends "base.djhtml" %}
-{% block title %} Login {% endblock %}
-{% block content %}
-    <h1>Welcome to Secure Witness!</h1>
-    <form id="login_form" method="post" action="/login/">
-      {% csrf_token %}
-      Username: <input type="text" name="username" value="" size="50"/>
-      <br/>
-      Password: <input type="password" name="password" value="" size="50" />
-      <br/>
-      <input type="submit" value="submit"/>
-    </form>	
-{% endblock %}
+<DOCTYPE html>
+  <html>
+    <head>
+      <title>Login</title>
+    </head>
+    <body>
+      <h1>Welcome to Secure Witness!</h1>
+      <form id="login_form" method="post" action="/login/">
+	{% csrf_token %}
+	Username: <input type="text" name="username" value="" size="50"/>
+	<br/>
+	Password: <input type="password" name="password" value="" size="50" />
+	<br/>
+	<input type="submit" value="submit"/>
+      </form>
+      {% if error %}
+	<li> Invalid Login Credentials Supplied </li>
+	{% endif %}
+      <a href="/register">Register</a>
+    </body>
+  </html>
+  

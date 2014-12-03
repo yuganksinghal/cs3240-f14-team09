@@ -1,0 +1,19 @@
+{% extends "base.djhtml" %}
+{% block title %} Add A File {% endblock %}
+{% block content %}
+    <h1>Add A File To A Bulletin</h1>
+    <form id="add_file_form" method="post" action="/files/add/">
+      {% csrf_token %}
+      Select A Bulletin:<select name="bulletin">
+	{% for bulletin in bulletins %}}
+	    <option value="{{ bulletin.pk }}">{{ bulletin }}</option>
+	{% endfor %}
+      </select>
+      <br>
+      Select a file:<input id="id_file" name="file" type="file"/>
+      <br>
+      Password: <input type="password" name="password" value="" size="50" />
+      <br/>
+      <input type="submit" value="submit"/>
+    </form>
+{% endblock %}

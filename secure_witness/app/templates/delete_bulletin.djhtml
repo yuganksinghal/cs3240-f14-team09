@@ -2,7 +2,7 @@
 {% block title %} Delete A Bulletin {% endblock %}
 {% block content %}
     <h1>Delete A Bulletin</h1>
-    <form id="delete_bulletin_form" method="post" action="/my_bulletin/delete/">
+    <form id="delete_bulletin_form" method="post" action="/my_bulletins/delete/">
       {% csrf_token %}
       Select A Bulletin:<select name="bulletin">
 	{% for Bulletin in bulletins %}}

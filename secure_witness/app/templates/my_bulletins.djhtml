@@ -12,6 +12,7 @@
         Author: {{b.author.username}}<br>
         Description:<br>
         {{b.description}}<br>
+	Anonymous:{{b.anonymous}}<br>
         Files:<br> 
         {% for f in files %}
           {% if b == f.bulletin %}

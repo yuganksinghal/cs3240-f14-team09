@@ -9,7 +9,12 @@
 	{% load tz %}
         Title:{{b}}<br>
 	Date: {{b.pub_date|localtime}}<br>
-        Author: {{b.author.username}}<br>
+        Author:
+	{% if b.anonymous %}
+	  Anonymous<br>
+	{% else %}
+	  {{b.author.username}}<br>
+	{% endif %}
         Description:<br>
         {{b.description}}<br>
         Files:<br> 
@@ -22,4 +27,4 @@
 	<br>
       {% endfor %} 
   {% endif %}
-{% endblock %}
+{% endblock %} 

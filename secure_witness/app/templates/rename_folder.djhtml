@@ -15,7 +15,7 @@
 	{% endfor %}
 	</select>
 	<br>
-	New Folder Name: <input type="text" name="name" value="" size="50"/>
+	New Folder Name: <input type="text" name="name" value="" size="50"/ required>
 	<br/>
 	<input type="submit" value="submit"/>
       </form>
