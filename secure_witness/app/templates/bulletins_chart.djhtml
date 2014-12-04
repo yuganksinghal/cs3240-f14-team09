@@ -29,7 +29,7 @@
         <td> 
         {% for f in files %}
           {% if b == f.bulletin %}
-            {{f.filename}}<br>
+            <a  href={% url 'get file' f.pk %}>{{f.filename}}</a><br>
           {% endif %}
         {% endfor %}
 	</td>
