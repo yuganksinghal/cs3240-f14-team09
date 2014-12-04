@@ -2,14 +2,18 @@
 {% block title %} Copy A Folder {% endblock %}
 {% block content %}
   <h1>Copy A Bulletin</h1>
-  <form id="copy_bulletin_form" method="post" action="/my_bulletins/copy/">
-    {% csrf_token %}
-   Select A Bulletin: <select name="bulletin">
+  {% if bulletins|length == 0 %}
+    <p> No bulletins to copy </p>
+  {% else %}
+    <form id="copy_bulletin_form" method="post" action="/my_bulletins/copy/">
+      {% csrf_token %}
+      Select A Bulletin: <select name="bulletin">
       {% for Bulletin in bulletins %}}x
-	  <option value="{{ Bulletin.pk }}">{{ Bulletin.description }}</option>
+	<option value="{{ Bulletin.pk }}">{{ Bulletin.description }}</option>
       {% endfor %}
-    </select>
-    <br>
-    <input type="submit" value="submit"/>
-  </form>
+      </select>
+      <br>
+      <input type="submit" value="submit"/>
+    </form>
+  {% endif %}
 {% endblock %}

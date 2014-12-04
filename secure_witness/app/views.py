@@ -118,6 +118,11 @@ def delete_folder(request):
             pk = request.POST['folder']
             folder = Folder.objects.get(pk=pk)
             for bulletin in folder.bulletin_set.all():
+                for file in bulletin.file_set.all():
+                    path = os.getcwd() + '/uploads/' + request.user.username + '/' + file.filename + '.enc'
+                    if os.path.exists(path):
+                        os.remove(path)
+                    file.delete()
                 bulletin.delete()
             folder.delete()
             return HttpResponseRedirect(reverse('folders'))
@@ -238,8 +243,8 @@ def my_bulletins_chart(request):
         files = []
         for bulletin in bulletins:
             files.extend(bulletin.file_set.all())
-            template = loader.get_template('my_bulletins_chart.djhtml')
-            context = RequestContext(request, {
+        template = loader.get_template('my_bulletins_chart.djhtml')
+        context = RequestContext(request, {
             'bulletins':bulletins,
             'files':files
             })
@@ -298,6 +303,11 @@ def delete_bulletin(request):
         if request.method == 'POST':
             pk = request.POST['bulletin']
             bulletin = Bulletin.objects.get(pk=pk)
+            for file in bulletin.file_set.all():
+                path = os.getcwd() + '/uploads/' + request.user.username + '/' + file.filename + '.enc'
+                if os.path.exists(path):
+                    os.remove(path)
+                file.delete()
             bulletin.delete()
             return HttpResponseRedirect(reverse('my bulletins'))
         else:
@@ -322,7 +332,9 @@ def copy_bulletin(request):
                 description=bulletin.description,
                 pub_date=bulletin.pub_date,
                 author=bulletin.author,
-                folder=bulletin.folder
+                folder=bulletin.folder,
+                password = bulletin.password,
+                anonymous = bulletin.anonymous
             )
             bulletin_copy.save()
             for file in bulletin_copy.file_set.all():
@@ -383,7 +395,7 @@ def add_bulletin(request):
                     if not os.path.isfile(path+'.enc'): 
                         key = hashlib.sha256(password).digest()
                         encrypt_file(key, path)
-                    os.remove(path)
+                        os.remove(path)
                 return HttpResponseRedirect(reverse('my bulletins'))
         
             else:
@@ -443,7 +455,7 @@ def get_file(request,file_id):
     else:
         return HttpResponseRedirect(reverse('login'))
 
-def search_Bulletin(request):
+def search_bulletin(request):
     context = {}
     display = False
     if request.method == 'POST':
@@ -452,8 +464,16 @@ def search_Bulletin(request):
             queryset = Bulletin.objects.all()
             queryset = queryset.filter(Q(description__icontains=search_text) | Q(title__icontains=search_text ))
             context['search_result'] = queryset
+            
+            user_list = {}
+            queryset2 = User.objects.all()
+            queryset2 = queryset2.filter(username__icontains=search_text)
+            for x in queryset2:
+                    user_list = list(chain(x.bulletin_set.all(), user_list))
+            allset = list(chain(queryset, user_list))
+            context['title_and_description_result'] = queryset
+            context['user_result'] = user_list
             display = True
-            print queryset
         else:
             context['search_result'] = Bulletin.objects.none()
     context['display'] = display

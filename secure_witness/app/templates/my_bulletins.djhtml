@@ -2,17 +2,18 @@
 {% block title %}My Bulletins {% endblock %}
 {% block content %}
   <h1> My Bulletins </h1>
+  <a href="/my_bulletins/chart">See My Bulletin in Chart Form!</a><br><br>
   {% if bulletins|length == 0%}
     <p>No bulletins are available<p>
   {% else %}
       {% for b in bulletins %}
 	{% load tz %}
-        Title:{{b}}<br>
+        Title: {{b}}<br>
 	Date: {{b.pub_date|localtime}}<br>
         Author: {{b.author.username}}<br>
         Description:<br>
         {{b.description}}<br>
-	Anonymous:{{b.anonymous}}<br>
+	Anonymous: {{b.anonymous}}<br>
         Files:<br> 
         {% for f in files %}
           {% if b == f.bulletin %}

@@ -1,6 +1,7 @@
 {% extends "base.djhtml" %}
-{% block title %} Home {% endblock %}
+{% block title %} Bulletins Chart {% endblock %}
 {% block content %}
+  <h1> Bulletins Chart </h1>
   {% if bulletins|length == 0%}
     <p>No bulletins are available<p>
   {% else %}
