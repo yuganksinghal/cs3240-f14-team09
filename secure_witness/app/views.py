@@ -92,6 +92,14 @@ def search_Bulletin(request):
             #allset = list(chain(queryset, queryset3))
             #context['search_result'] = allset
 
+            user_list = {}
+            queryset2 = User.objects.all()
+            queryset2 = queryset2.filter(username__icontains=search_text)
+            for x in queryset2:
+                user_list = list(chain(x.bulletin_set.all(), user_list))
+            allset = list(chain(queryset, user_list))
+            context['search_result'] = allset
+
         else:
             context['search_result'] = Bulletin.objects.none()
     return render(request, 'search_bulletin.html', context)
